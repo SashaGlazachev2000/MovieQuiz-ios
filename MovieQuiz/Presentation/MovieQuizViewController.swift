@@ -45,7 +45,7 @@ final class MovieQuizViewController: UIViewController {
     ]
     
     private var currentQuestionIndex = 0
-    private var orrectAnswers = 0
+    private var сorrectAnswers = 0
     
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var textLabel: UILabel!
@@ -76,28 +76,59 @@ final class MovieQuizViewController: UIViewController {
         textLabel.text = step.question
     }
     
+    private func show(quiz result: QuizResultsViewModel){
+        let alert = UIAlertController(
+            title: result.title,
+            message: result.text,
+            preferredStyle: .alert)
+        
+        let alertAction = UIAlertAction(
+            title: result.buttonText,
+            style: .default){_ in
+                self.restartGame()
+            }
+        
+        alert.addAction(alertAction)
+        
+        self.present(alert, animated: true)
+    }
+    
     private func showAnswerResult(isCorrect: Bool){
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.cornerRadius = 6
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
-        // запускаем задачу через 1 секунду c помощью диспетчера задач
         
+        isCorrect ? сorrectAnswers += 1 : nil
+        
+        // запускаем задачу через 1 секунду c помощью диспетчера задач
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-           // код, который мы хотим вызвать через 1 секунду
+            // код, который мы хотим вызвать через 1 секунду
             
-           self.showNextQuestionOrResults()
+            self.showNextQuestionOrResults()
         }
         
     }
     
     private func showNextQuestionOrResults(){
         if currentQuestionIndex == questions.count - 1{
-            
+            let viewModel = QuizResultsViewModel(
+                title: "Сыграть еще раз?",
+                text: "Правильные ответы \(сorrectAnswers)/\(questions.count)",
+                buttonText: "Рестарт")
+            show(quiz: viewModel)
         }else {
             currentQuestionIndex += 1
             show(quiz: convert(model: questions[currentQuestionIndex]))
         }
+    }
+    
+    private func restartGame(){
+        currentQuestionIndex = 0
+        сorrectAnswers = 0
+        let firstQuestion = questions[currentQuestionIndex]
+        let viewModel = convert(model: firstQuestion)
+        show(quiz:viewModel)
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel{
@@ -109,11 +140,17 @@ final class MovieQuizViewController: UIViewController {
         return res
     }
 }
- 
+
 struct QuizQuestion{
     let image: String
     let text: String
     let corretAner: Bool
+}
+
+struct QuizResultsViewModel{
+    let title: String
+    let text: String
+    let buttonText: String
 }
 
 struct QuizStepViewModel {
