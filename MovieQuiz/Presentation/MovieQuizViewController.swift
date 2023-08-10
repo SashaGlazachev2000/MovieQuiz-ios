@@ -47,17 +47,21 @@ final class MovieQuizViewController: UIViewController {
     private var currentQuestionIndex = 0
     private var сorrectAnswers = 0
     
+    @IBOutlet weak var noButton: UIButton!
+    @IBOutlet weak var yesButton: UIButton!
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private weak var imageView: UIImageView!
     
     @IBAction private func yesButtonClicked(_ sender: Any) {
+        yesButton.isEnabled = false
         let correctAner: Bool = questions[currentQuestionIndex].corretAner
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == correctAner)
         
     }
     @IBAction private func noButtonClicked(_ sender: Any) {
+        noButton.isEnabled = false
         let correctAner: Bool = questions[currentQuestionIndex].corretAner
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == correctAner)
@@ -104,13 +108,16 @@ final class MovieQuizViewController: UIViewController {
         // запускаем задачу через 1 секунду c помощью диспетчера задач
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             // код, который мы хотим вызвать через 1 секунду
-            
+            self.yesButton.isEnabled = true
+            self.noButton.isEnabled = true
             self.showNextQuestionOrResults()
         }
         
     }
     
     private func showNextQuestionOrResults(){
+        imageView.layer.borderWidth = 0
+        
         if currentQuestionIndex == questions.count - 1{
             let viewModel = QuizResultsViewModel(
                 title: "Сыграть еще раз?",
