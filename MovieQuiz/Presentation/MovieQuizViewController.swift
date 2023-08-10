@@ -54,14 +54,12 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private weak var imageView: UIImageView!
     
     @IBAction private func yesButtonClicked(_ sender: Any) {
-        yesButton.isEnabled = false
         let correctAner: Bool = questions[currentQuestionIndex].corretAner
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == correctAner)
         
     }
     @IBAction private func noButtonClicked(_ sender: Any) {
-        noButton.isEnabled = false
         let correctAner: Bool = questions[currentQuestionIndex].corretAner
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == correctAner)
@@ -98,6 +96,9 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func showAnswerResult(isCorrect: Bool){
+        yesButton.isEnabled = false
+        noButton.isEnabled = false
+        
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.cornerRadius = 6
