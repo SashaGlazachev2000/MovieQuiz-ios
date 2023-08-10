@@ -121,9 +121,9 @@ final class MovieQuizViewController: UIViewController {
         
         if currentQuestionIndex == questions.count - 1{
             let viewModel = QuizResultsViewModel(
-                title: "Сыграть еще раз?",
-                text: "Правильные ответы \(сorrectAnswers)/\(questions.count)",
-                buttonText: "Рестарт")
+                title: "Этот раунд окончен!",
+                text: "Ваш результат: \(сorrectAnswers)/\(questions.count)",
+                buttonText: "Сыграть еще раз")
             show(quiz: viewModel)
         }else {
             currentQuestionIndex += 1
