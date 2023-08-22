@@ -117,7 +117,6 @@
                                     <constraint firstAttribute="trailing" secondItem="KGY-xO-uRH" secondAttribute="trailing" id="Tcu-td-4yD"/>
                                     <constraint firstItem="KGY-xO-uRH" firstAttribute="leading" secondItem="NeY-ON-w2E" secondAttribute="leading" id="UQA-4H-0eT"/>
                                     <constraint firstItem="kzb-zy-GxM" firstAttribute="top" secondItem="KGY-xO-uRH" secondAttribute="bottom" constant="20" id="Z7k-sU-zgy"/>
-                                    <constraint firstItem="0Nz-ez-mZx" firstAttribute="top" secondItem="NeY-ON-w2E" secondAttribute="top" constant="572" id="oKS-h8-oGx"/>
                                 </constraints>
                             </stackView>
                         </subviews>
