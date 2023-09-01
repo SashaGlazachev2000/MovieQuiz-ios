@@ -1,8 +1,8 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private let questionsAmout: Int = 10
-    private var questionFactory: QuestionFactoryProtocol = QuestionFactory()
+    private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     
     private var currentQuestionIndex = 0
@@ -29,13 +29,26 @@ final class MovieQuizViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        show(quiz: convert(model: curentQuestion))
-        if let firstQuestion = questionFactory.requestNextQuestion() {
-            currentQuestion = firstQuestion
-            let viewModel = convert(model: firstQuestion)
-            show(quiz: viewModel)
+
+        questionFactory = QuestionFactory(delegate: self)
+        
+        questionFactory?.requestNextQuestion()
+    }
+    
+    // MARK: - QuestionFactoryDelegate
+
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else{return}
+        
+            currentQuestion = question
+       
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.show(quiz: viewModel)
         }
     }
+    
+    
     
     private func show(quiz step: QuizStepViewModel){
         counterLabel.text = step.questionNumber
@@ -80,7 +93,6 @@ final class MovieQuizViewController: UIViewController {
             self.noButton.isEnabled = true
             self.showNextQuestionOrResults()
         }
-        
     }
     
     private func showNextQuestionOrResults(){
@@ -99,23 +111,14 @@ final class MovieQuizViewController: UIViewController {
             show(quiz: viewModel)
         }else {
             currentQuestionIndex += 1
-            if let nextQuestion = questionFactory.requestNextQuestion(){
-                currentQuestion = nextQuestion
-                let viewModel = convert(model: nextQuestion)
-                show(quiz: viewModel)
-            }
-            
+            self.questionFactory?.requestNextQuestion()
         }
     }
     
     private func restartGame(){
         currentQuestionIndex = 0
         сorrectAnswers = 0
-        if let firstQuestion = questionFactory.requestNextQuestion(){
-            currentQuestion = firstQuestion
-            let viewModel = convert(model: firstQuestion)
-            show(quiz: viewModel)
-        }
+        questionFactory?.requestNextQuestion()
     
     }
     
