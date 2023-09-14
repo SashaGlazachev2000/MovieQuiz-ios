@@ -5,6 +5,6 @@ struct AlertModel{
     let message: String
     let buttonText: String
     
-    func completion(){}
+    let completion: () -> Void
 }
 

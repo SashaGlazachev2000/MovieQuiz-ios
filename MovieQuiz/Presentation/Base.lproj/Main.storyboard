@@ -46,7 +46,7 @@
                                         </subviews>
                                     </stackView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kzb-zy-GxM" userLabel="Preview Image">
-                                        <rect key="frame" x="0.0" y="43.666666666666657" width="374" height="508.33333333333337"/>
+                                        <rect key="frame" x="0.0" y="43.666666666666657" width="374" height="468.33333333333337"/>
                                         <color key="backgroundColor" name="YP White"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" secondItem="kzb-zy-GxM" secondAttribute="height" multiplier="2:3" id="epG-HU-zrs"/>
@@ -58,7 +58,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Nz-ez-mZx" userLabel="Question Label">
-                                        <rect key="frame" x="0.0" y="572" width="374" height="54"/>
+                                        <rect key="frame" x="0.0" y="532" width="374" height="94"/>
                                         <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
                                         <color key="textColor" name="YP White"/>
                                         <nil key="highlightedColor"/>
@@ -119,17 +119,23 @@
                                     <constraint firstItem="kzb-zy-GxM" firstAttribute="top" secondItem="KGY-xO-uRH" secondAttribute="bottom" constant="20" id="Z7k-sU-zgy"/>
                                 </constraints>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="DrF-nN-Sb3">
+                                <rect key="frame" x="197" y="358" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
                             <constraint firstItem="NeY-ON-w2E" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="JxW-rN-EdQ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="NeY-ON-w2E" secondAttribute="trailing" constant="20" id="KOD-aX-2NV"/>
+                            <constraint firstItem="DrF-nN-Sb3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="NiX-oi-HLg"/>
                             <constraint firstItem="NeY-ON-w2E" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="fNh-SN-DZx"/>
+                            <constraint firstItem="DrF-nN-Sb3" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="fo3-aO-pbN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="NeY-ON-w2E" secondAttribute="bottom" id="sPI-eu-7qK"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="DrF-nN-Sb3" id="Qle-lD-H3E"/>
                         <outlet property="counterLabel" destination="qZs-3N-zBm" id="S0L-xY-XOi"/>
                         <outlet property="imageView" destination="kzb-zy-GxM" id="nTz-XE-8o3"/>
                         <outlet property="noButton" destination="jsa-nI-D1R" id="29k-Y9-f0p"/>

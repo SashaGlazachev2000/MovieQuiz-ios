@@ -17,14 +17,13 @@ final class StatisticServiceImplementation: StatisticService{
         }
         set {
             guard let data = try? JSONEncoder().encode(newValue) else {
-                print("Невозможно сохранить результат")
                 return
             }
             userDefaults.set(data, forKey: Keys.total.rawValue)
         }
     }
     
-    var gamesCount: Int{ //Колличество игр
+    var gamesCount: Int { //Колличество игр
         get{
         guard let data = userDefaults.data(forKey: Keys.gamesCount.rawValue),
               let count = try? JSONDecoder().decode(Int.self, from: data) else {return 0}
@@ -32,7 +31,6 @@ final class StatisticServiceImplementation: StatisticService{
         }
         set {
             guard let data = try? JSONEncoder().encode(newValue) else {
-                print("Невозможно сохранить результат")
                 return
             }
             userDefaults.set(data, forKey: Keys.gamesCount.rawValue)
@@ -50,7 +48,6 @@ final class StatisticServiceImplementation: StatisticService{
         }
         set {
             guard let data = try? JSONEncoder().encode(newValue) else {
-                print("Невозможно сохранить результат")
                 return
             }
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
@@ -75,26 +72,4 @@ final class StatisticServiceImplementation: StatisticService{
         currentGame.isGameRecord(correct: bestGame.correct) ? bestGame = currentGame : nil
     }
     
-}
-
-
-struct GameRecord: Codable{
-    
-    func isGameRecord(correct count: Int) -> Bool{
-        if self.correct < count{
-            return false
-        }
-        else{
-            return true
-        }
-    }
-    
-    var correct: Int
-    
-    var total: Int
-    
-    var date: Date = Date()
-    
-    
-  
 }

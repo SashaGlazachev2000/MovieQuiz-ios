@@ -1,6 +1,6 @@
 import UIKit
 
-final class AlertPresenter: AlertPresenterProtocol{
+final class AlertPresenter: AlertPresenterProtocol {
     private let cotroller: UIViewController
     private weak var delegate: AlertPresenterDelegate?
     
@@ -9,7 +9,9 @@ final class AlertPresenter: AlertPresenterProtocol{
         self.cotroller = controller
     }
     
-    func show(quiz result: AlertModel){
+    
+    
+    func show(quiz result: AlertModel) {
         let alert = UIAlertController(
             title: result.title,
             message: result.message,
@@ -17,9 +19,8 @@ final class AlertPresenter: AlertPresenterProtocol{
         
         let alertAction = UIAlertAction(
             title: result.buttonText,
-            style: .default){ [weak self] _ in
-                guard let self = self else { return }
-                delegate?.restartGame()
+            style: .default) { _ in
+                result.completion()
             }
         
         alert.addAction(alertAction)
