@@ -9,8 +9,6 @@ final class AlertPresenter: AlertPresenterProtocol {
         self.cotroller = controller
     }
     
-    
-    
     func show(quiz result: AlertModel) {
         let alert = UIAlertController(
             title: result.title,
@@ -26,5 +24,4 @@ final class AlertPresenter: AlertPresenterProtocol {
         alert.addAction(alertAction)
         cotroller.present(alert, animated: true)
     }
-    
 }

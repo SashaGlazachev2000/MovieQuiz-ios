@@ -21,7 +21,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     private var statisticImplementation: StatisticService?
     private var currentQuestionIndex: Int = .zero
     private var correctAnswers: Int = .zero
-   
+    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -31,9 +31,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         alertPresenter = AlertPresenter(delegate: self, controller: self)
         statisticImplementation = StatisticServiceImplementation()
         
+        activityIndicator.hidesWhenStopped = true
         showLadingIndicator()
         questionFactory?.loadData()
-//        questionFactory?.requestNextQuestion()
     }
     
     
@@ -55,6 +55,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else{return}
         
+        activityIndicator.stopAnimating()
         currentQuestion = question
         
         let viewModel = convert(model: question)
@@ -64,7 +65,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     }
     
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true
+        activityIndicator.startAnimating()
         questionFactory?.requestNextQuestion()
     }
     
@@ -73,7 +74,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     }
     
     
-   // MARK: - AlertPresenterDelegate
+    // MARK: - AlertPresenterDelegate
     func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
@@ -89,13 +90,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     }
     
     private func showLadingIndicator() {
-        activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
     
     private func hideLoadingIndicator() {
-        activityIndicator.isHidden = true
-        activityIndicator.startAnimating()
+        activityIndicator.stopAnimating()
     }
     
     
@@ -103,20 +102,35 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         hideLoadingIndicator()
         
         let model = AlertModel(title: "Ошибка",
-                                   message: message,
-                                   buttonText: "Попробовать еще раз") { [weak self] in
+                               message: message,
+                               buttonText: "Попробовать еще раз") { [weak self] in
             guard let self = self else {return}
             
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
             
             self.questionFactory?.requestNextQuestion()
+            self.questionFactory?.loadData()
         }
-            
-            alertPresenter?.show(quiz: model)
+        
+        alertPresenter?.show(quiz: model)
+    }
+    
+    func showNetworkErrorImage(message: String) {
+        hideLoadingIndicator()
+        
+        let model = AlertModel(title: "Ошибка",
+                               message: message,
+                               buttonText: "Попробовать еще раз") { [weak self] in
+            guard let self = self else {return}
+            self.questionFactory?.requestNextQuestion()
+        }
+        
+        alertPresenter?.show(quiz: model)
     }
     
     private func showAnswerResult(isCorrect: Bool) {
+        showLadingIndicator()
         yesButton.isEnabled = false
         noButton.isEnabled = false
         
@@ -150,9 +164,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
                 message: text,
                 buttonText: "Сыграть еще раз"
             ){ [weak self] in
-                    guard let self = self else { return }
-                    restartGame()
-                }
+                guard let self = self else { return }
+                restartGame()
+            }
             alertPresenter?.show(quiz: viewModel)
         } else {
             currentQuestionIndex += 1
