@@ -27,11 +27,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        questionFactory = QuestionFactory(delegate: self)
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         alertPresenter = AlertPresenter(delegate: self, controller: self)
         statisticImplementation = StatisticServiceImplementation()
         
-        questionFactory?.requestNextQuestion()
+        showLadingIndicator()
+        questionFactory?.loadData()
+//        questionFactory?.requestNextQuestion()
     }
     
     
@@ -48,7 +50,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.corretAwner)
     }
     
-    
+    // MARK: - Public Methods
     // MARK: - QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else{return}
@@ -61,13 +63,23 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         }
     }
     
-    // MARK: - Public Methods
+    func didLoadDataFromServer() {
+        activityIndicator.isHidden = true
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+    
+    
+   // MARK: - AlertPresenterDelegate
     func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
         questionFactory?.requestNextQuestion()
     }
-
+    
     
     // MARK: - Private Methods
     private func show(quiz step: QuizStepViewModel) {
@@ -93,7 +105,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         let model = AlertModel(title: "Ошибка",
                                    message: message,
                                    buttonText: "Попробовать еще раз") { [weak self] in
-            guard let self = self else { return }
+            guard let self = self else {return}
             
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
@@ -143,7 +155,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
                 }
             alertPresenter?.show(quiz: viewModel)
         } else {
-//            showNetworkError(message: "asdasd")
             currentQuestionIndex += 1
             self.questionFactory?.requestNextQuestion()
         }
@@ -158,7 +169,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let image: UIImage = UIImage(named: model.image) ?? UIImage()
+        let image: UIImage = UIImage(data: model.image) ?? UIImage()
         let res = QuizStepViewModel(
             image: image,
             question: model.text,
