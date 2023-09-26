@@ -13,12 +13,9 @@ final class MovieQuizViewController: UIViewController {
     
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
+    
     // MARK: - Private Properties
     private var presenter: MovieQuizPresenter?
-    
-    
-    private var alertPresenter: AlertPresenter?
-    
     
     
     // MARK: - Lifecycle
@@ -40,7 +37,7 @@ final class MovieQuizViewController: UIViewController {
     }
     
     
-    // MARK: - Private Methods
+    // MARK: - Public Methods
     func show(quiz step: QuizStepViewModel) {
         counterLabel.text = step.questionNumber
         imageView.image = step.image
