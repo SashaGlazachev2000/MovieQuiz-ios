@@ -3,10 +3,11 @@ import UIKit
 final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate {
     
     // MARK: Private Properties
-    private weak var viewController: MovieQuizViewController?
+    private weak var viewController: MovieQuizViewControllerProtocol?
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestionIndex: Int = .zero
     private var correctAnswers: Int = .zero
+    
     
     // MARK: Public Properties
     var alertPresenter: AlertPresenter?
@@ -16,7 +17,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
     
     
     // MARK: Init
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
         statisticImplementation = StatisticServiceImplementation()
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
@@ -99,16 +100,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
         result += "Средняя точность: \(String(format: "%.2f", statistic.totalAccuracy))%"
         return result
     }
-    
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let image: UIImage = UIImage(data: model.image) ?? UIImage()
-        let res = QuizStepViewModel(
-            image: image,
-            question: model.text,
-            questionNumber: "\(self.currentQuestionIndex + 1)/\(questionsAmout)")
-        return res
-    }
-    
+        
     
     // MARK: Public Methods
     func yesButtonClicked() {
@@ -117,6 +109,15 @@ final class MovieQuizPresenter: QuestionFactoryDelegate, AlertPresenterDelegate 
     
     func noButtonClicked() {
         didAnswer(isYes: false)
+    }
+    
+    func convert(model: QuizQuestion) -> QuizStepViewModel {
+        let image: UIImage = UIImage(data: model.image) ?? UIImage()
+        let res = QuizStepViewModel(
+            image: image,
+            question: model.text,
+            questionNumber: "\(self.currentQuestionIndex + 1)/\(questionsAmout)")
+        return res
     }
     
     func showNetworkErrorImage(message: String) {
