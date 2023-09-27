@@ -1,10 +1,10 @@
 import UIKit
 
 final class AlertPresenter: AlertPresenterProtocol {
-    private let cotroller: UIViewController
+    private let cotroller: MovieQuizViewControllerProtocol
     private weak var delegate: AlertPresenterDelegate?
     
-    init(delegate: AlertPresenterDelegate, controller: UIViewController) {
+    init(delegate: AlertPresenterDelegate, controller: MovieQuizViewControllerProtocol) {
         self.delegate = delegate
         self.cotroller = controller
     }
@@ -14,6 +14,7 @@ final class AlertPresenter: AlertPresenterProtocol {
             title: result.title,
             message: result.message,
             preferredStyle: .alert)
+        alert.view.accessibilityIdentifier = "Game results"
         
         let alertAction = UIAlertAction(
             title: result.buttonText,
